@@ -6,7 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 
-import login from "@/actions/login";
+import register from "@/actions/register";
 import FormError from "@/components/form-error";
 import FormSuccess from "@/components/form-success";
 import { Button } from "@/components/ui/button";
@@ -19,7 +19,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { useState, useTransition } from "react";
+import { startTransition, useState, useTransition } from "react";
 
 export const RegisterForm = () => {
   const [error, setError] = useState<string | undefined>("");
@@ -39,7 +39,7 @@ export const RegisterForm = () => {
     setSuccess("");
 
     startTransition(() => {
-      login(values).then((data) => {
+      register(values).then((data) => {
         setError(data.error);
         setSuccess(data.success);
       });
