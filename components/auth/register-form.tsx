@@ -19,7 +19,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { startTransition, useState, useTransition } from "react";
+import { useState, useTransition } from "react";
 
 export const RegisterForm = () => {
   const [error, setError] = useState<string | undefined>("");
@@ -58,6 +58,23 @@ export const RegisterForm = () => {
           <div className="space-y-4">
             <FormField
               control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Name</FormLabel>
+                  <FormControl>
+                    <Input
+                      {...field}
+                      disabled={isPending}
+                      placeholder="john doe"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
               name="email"
               render={({ field }) => (
                 <FormItem>
@@ -86,23 +103,6 @@ export const RegisterForm = () => {
                       disabled={isPending}
                       placeholder="*****"
                       type="password"
-                    />
-                  </FormControl>
-                  <FormMessage />
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="name"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Name</FormLabel>
-                  <FormControl>
-                    <Input
-                      {...field}
-                      disabled={isPending}
-                      placeholder="john doe"
                     />
                   </FormControl>
                   <FormMessage />
