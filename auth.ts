@@ -13,7 +13,36 @@ declare module "next-auth" {
 }
 
 export const { handlers: { GET, POST }, auth, signIn, signOut } = NextAuth({
+  pages: {
+    signIn: '/auth/login',
+    error: '/auth/error'
+  },
+  events: {
+    async linkAccount({ user }) {
+      await db.user.update({
+        where: {
+          id: user.id,
+        },
+        data: {
+          emailVerified: new Date()
+        }
+      })
+    }
+  },
   callbacks: {
+    async signIn({ user, account }) {
+      // Allow OAuth without email verification
+      if (account?.provider !== "credentials") return true;
+
+      const existingUser = await getUserById(user.id as string)
+
+      if (!existingUser?.emailVerified) return false
+
+      // TODO: Add 2FA check
+
+      return true
+    }
+    ,
     async session({ token, session }) {
       if (token.sub && session.user) {
         session.user.role = token.role as Role
